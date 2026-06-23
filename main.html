@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Днём Рождения! 💖</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,500&family=Raleway:wght@300;400;500;600&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pink: #fbeff2;
+            --pink-soft: #f8dce5;
+            --pink-deep: #e8b4c4;
+            --lavender: #f2ecf8;
+            --lavender-soft: #e4d8f0;
+            --lavender-deep: #c9b8e0;
+            --peach: #fef5ef;
+            --peach-soft: #fce4d6;
+            --peach-deep: #f5c9a8;
+            --mint: #effaf4;
+            --mint-soft: #d8f0e4;
+            --mint-deep: #b4d8c4;
+            --beige: #fdf9f5;
+            --cream: #fdfaf7;
+            --white-soft: #fffafc;
+            --text-dark: #4a3548;
+            --text-medium: #6b5a68;
+            --text-light: #8a7a85;
+            --gold: #d4b896;
+            --gold-light: #e8d5c0;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', 'Quicksand', sans-serif;
+            background: #fdf9f5;
+            overflow: hidden;
+            height: 100vh;
+            height: 100dvh;
+            width: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .scroll-container {
+            height: 100vh;
+            height: 100dvh;
+            width: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+            z-index: 1;
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .section {
+            height: 100vh;
+            height: 100dvh;
+            width: 100%;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            will-change: transform;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.08);
+            z-index: 1;
+        }
+
+        .section-content-wrapper {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, opacity;
+        }
+        .section.visible .section-content-wrapper {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-content-wrapper.text-left {
+            flex-direction: row;
+        }
+        .section-content-wrapper.text-right {
+            flex-direction: row-reverse;
+        }
+
+        .text-block {
+            flex: 1 1 45%;
+            padding: 1rem;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
+            will-change: transform, opacity;
+        }
+        .section.visible .text-block {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .text-right .text-block {
+            transform: translateX(30px);
+        }
+        .section.visible .text-right .text-block {
+            transform: translateX(0);
+        }
+
+        .photo-grid {
+            flex: 1 1 55%;
+            display: grid;
+            grid-template-columns: 1.3fr 0.9fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 0.8rem;
+            aspect-ratio: 4 / 3;          /* ← задаёт пропорции всей сетки */
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
+            will-change: transform, opacity;
+        }
+
+        .photo-big {
+            grid-row: 1 / 3;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            background-color: #fce4d6;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            height: 100%;                 /* ← растягивается на всю высоту родителя */
+        }
+
+        .photo-small {
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px;
+            background-color: #f8dce5;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            height: 100%;                 /* ← аналогично */
+        }
+        .section.visible .photo-grid {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .photo-big {
+            grid-row: 1 / 3;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            background-color: #fce4d6;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .photo-small {
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px;
+            background-color: #f8dce5;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .event-icon {
+            font-size: 2.8rem;
+            margin-bottom: 0.3rem;
+            display: block;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+        @keyframes floatIcon {
+            0%,100%{ transform: translateY(0); }
+            50%{ transform: translateY(-8px); }
+        }
+
+        .text-block h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #4a3548;
+            margin-bottom: 0.4rem;
+        }
+        .text-block .event-date {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #b8978a;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .text-block p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #5c4a55;
+        }
+
+        /* финальная секция */
+        #section13 {
+            background: linear-gradient(135deg, #fef5ef 0%, #fbeff2 25%, #f2ecf8 50%, #effaf4 75%, #fdfaf7 100%);
+            background-size: 300% 300%;
+            animation: gradientShift 10s ease infinite;
+        }
+        #section13::before {
+            background: rgba(255,255,255,0.2);
+        }
+        @keyframes gradientShift {
+            0%,100%{ background-position: 0% 50%; }
+            50%{ background-position: 100% 50%; }
+        }
+
+        #section13 .section-content-wrapper {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 2px solid rgba(232,180,196,0.35);
+            flex-direction: column;
+            text-align: center;
+            max-width: 700px;
+            padding: 3rem 2.5rem;
+        }
+        #section13 .text-block {
+            transform: none;
+            opacity: 1;
+        }
+        #section13 .big-heart {
+            font-size: 5rem;
+            display: block;
+            animation: bigHeartPulse 1s ease-in-out infinite;
+        }
+        @keyframes bigHeartPulse {
+            0%,100%{ transform: scale(1); }
+            25%{ transform: scale(1.18); }
+            75%{ transform: scale(1.1); }
+        }
+        #section13 h2 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #d4889e, #b88dc4, #d4a878);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        .share-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.9rem 2.3rem;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #e8b4c4, #c9b8e0);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            box-shadow: 0 10px 28px rgba(200,160,180,0.4);
+            transition: all 0.3s;
+        }
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 36px rgba(200,160,180,0.55);
+        }
+
+        /* боковая навигация */
+        .side-nav {
+            position: fixed;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .side-nav .dot {
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(180,160,170,0.45);
+            border: 2px solid rgba(255,255,255,0.65);
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+        .side-nav .dot:hover {
+            background: rgba(210,170,185,0.85);
+            transform: scale(1.6);
+            border-color: #fff;
+        }
+        .side-nav .dot.active {
+            background: #e8b4c4;
+            border-color: #fff;
+            transform: scale(1.6);
+            box-shadow: 0 0 18px rgba(220,150,175,0.7);
+        }
+
+        /* splash screen */
+        .splash {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: linear-gradient(145deg, #fdf5f8 0%, #f8e8f0 25%, #efe4f5 50%, #fefafc 75%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 1s;
+            opacity: 1;
+        }
+        .splash.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .splash.hidden {
+            display: none;
+        }
+        .splash-heart {
+            width: 100px;
+            height: 100px;
+            animation: splashHeartBeat 1s infinite;
+        }
+        @keyframes splashHeartBeat {
+            0%,100%{ transform: scale(1); }
+            30%{ transform: scale(1.15); }
+            60%{ transform: scale(1.05); }
+        }
+        .splash-text {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2rem;
+            color: #7a6570;
+            margin-top: 2rem;
+        }
+
+        /* лепестки */
+        #petalsCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* конфетти */
+        .confetti-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            animation: confettiFall var(--fall-duration, 2.5s) var(--fall-delay, 0s) forwards;
+            opacity: 0;
+        }
+        @keyframes confettiFall {
+            0% { opacity:1; transform: translate(0,0) rotate(0deg); }
+            100% { opacity:0; transform: translate(var(--drift-x), 105vh) rotate(var(--spin)); }
+        }
+
+        /* адаптивность */
+        @media (max-width: 1024px) {
+            .section-content-wrapper {
+                gap: 1.2rem;
+                padding: 1.5rem;
+            }
+            .text-block h2 {
+                font-size: 1.8rem;
+            }
+            .photo-grid {
+                gap: 0.5rem;
+            }
+            .side-nav {
+                right: 8px;
+                gap: 8px;
+            }
+            .side-nav .dot {
+                width: 8px;
+                height: 8px;
+            }
+        }
+        .scroll-container {
+            scroll-behavior: smooth;
+            overscroll-behavior-y: none;
+        }
+
+        @media (max-width: 768px) {
+            .section-content-wrapper {
+                flex-direction: column !important;
+                max-width: 95%;
+                padding: 1.2rem;
+                gap: 1rem;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background: rgba(255, 255, 255, 0.7);
+            }
+            .text-block, .photo-grid {
+                flex: unset;
+                width: 100%;
+            }
+            .photo-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+            }
+            .photo-big {
+                grid-row: auto;
+                height: 200px;
+            }
+            .photo-small {
+                height: 200px;
+            }
+            .text-block h2 {
+                font-size: 1.6rem;
+            }
+            .side-nav {
+                right: 4px;
+                gap: 6px;
+            }
+            .side-nav .dot {
+                width: 7px;
+                height: 7px;
+            }
+            #section13 .section-content-wrapper {
+                padding: 2rem 1.5rem;
+            }
+            #section13 h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-content-wrapper {
+                padding: 1rem;
+                border-radius: 20px;
+            }
+            .text-block h2 {
+                font-size: 1.3rem;
+            }
+            .photo-big, .photo-small {
+                height: 150px;
+            }
+            .side-nav .dot {
+                width: 6px;
+                height: 6px;
+                will-change: transform;
+            }
+        }
+        /* Контейнер конфетти — позиционируется абсолютно в финальной секции */
+        .confetti-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+            overflow: visible; /* чтобы частицы не обрезались */
+        }
+
+        /* Одна частица */
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            pointer-events: none;
+            will-change: transform, opacity;
+            animation: confettiBurst var(--duration, 1.8s) var(--delay, 0s) ease-out forwards;
+            opacity: 0;
+        }
+
+        /* Анимация: взлёт → разлёт → падение */
+        @keyframes confettiBurst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.4) rotate(0deg);
+            }
+            20% {
+                opacity: 1;
+                /* Взлетаем выше: -250px (было -160px) */
+                transform: translate(var(--drift-x, 60px), -450px) scale(1,3) rotate(var(--spin-start, 180deg));
+            }
+            60% {
+                opacity: 0.9;
+                transform: translate(var(--drift-mid, -30px), 80px) scale(0.8) rotate(var(--spin-mid, 400deg));
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--drift-end, 40px), 105vh) scale(0.15) rotate(var(--spin-end, 720deg));
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- SPLASH SCREEN -->
+    <div class="splash" id="splash">
+        <div class="splash-heart">
+            <svg viewBox="0 0 100 100"><path d="M50 88 C25 70 5 52 5 32 C5 18 15 8 28 8 C36 8 43 13 50 22 C57 13 64 8 72 8 C85 8 95 18 95 32 C95 52 75 70 50 88Z" fill="#e8a0b8"/></svg>
+        </div>
+        <p class="splash-text" id="splashText"></p>
+    </div>
+
+    <!-- ХОЛСТ ЛЕПЕСТКОВ -->
+    <canvas id="petalsCanvas"></canvas>
+
+    <!-- НАВИГАЦИЯ -->
+    <nav class="side-nav" id="sideNav"></nav>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="scroll-container" id="scrollContainer">
+        <!-- секции создаются динамически -->
+    </div>
+
+    <script>
+        // уникальные градиенты для каждой секции
+            
+        (function() {
+            // 12 событий
+            const sectionGradients = [
+                'linear-gradient(135deg, #fce4d6 0%, #f8dce5 100%)',
+                'linear-gradient(135deg, #e4d8f0 0%, #d8f0e4 100%)',
+                'linear-gradient(135deg, #fbeff2 0%, #fef5ef 100%)',
+                'linear-gradient(135deg, #f2ecf8 0%, #fce4d6 100%)',
+                'linear-gradient(135deg, #effaf4 0%, #f8dce5 100%)',
+                'linear-gradient(135deg, #fef5ef 0%, #e4d8f0 100%)',
+                'linear-gradient(135deg, #fce4d6 0%, #d8f0e4 100%)',
+                'linear-gradient(135deg, #f8dce5 0%, #f2ecf8 100%)',
+                'linear-gradient(135deg, #e4d8f0 0%, #fef5ef 100%)',
+                'linear-gradient(135deg, #d8f0e4 0%, #fbeff2 100%)',
+                'linear-gradient(135deg, #fbeff2 0%, #effaf4 100%)',
+                'linear-gradient(135deg, #f2ecf8 0%, #f8dce5 100%)'
+            ];
+            
+
+            const sectionsData = [
+                {
+                    title: 'Год назад',
+                    date: 'Июнь 2025',
+                    desc: 'Ровно год назад ты задувала свечи на торте, а мы загадывали, чтобы этот год стал особенным'
+                },
+                {
+                    title: 'Диплом',
+                    date: 'Июль 2025',
+                    desc: 'Окончание университета и искреняя гордость за пройденный путь'
+                },
+                {
+                    title: 'Август в сердце',
+                    date: 'Август 2025',
+                    desc: 'Лёгкие летние дни, долгие прогулки и тёплые вечера'
+                },
+                {
+                    title: 'Сочи',
+                    date: 'Сентябрь 2025',
+                    desc: 'Сочи, шум волн, шикарные закаты и бесконечное чувство свободы'
+                },
+                {
+                    title: 'Кленовый октябрь',
+                    date: 'Октябрь 2025',
+                    desc: 'Золотая листва и уют осенних прогулок..'
+                },
+                {
+                    title: 'Свадьба',
+                    date: 'Ноябрь 2025',
+                    desc: 'Трогательный ноябрьский день, когда два сердца соединились на государственном уровне'
+                },
+                {
+                    title: 'Снежный декабрь',
+                    date: 'Декабрь 2025',
+                    desc: 'Первый снег, морозный воздух и ощущение приближающегося праздника'
+                },
+                {
+                    title: 'Новый год',
+                    date: 'Январь 2026',
+                    desc: 'Новый год и бенгальские огни'
+                },
+                {
+                    title: 'Февраль',
+                    date: 'Февраль 2026',
+                    desc: 'Уютный вечер за Монополией - смех, азарт и время, проведённое вместе.'
+                },
+                {
+                    title: 'Март',
+                    date: 'Март 2026',
+                    desc: 'Первое тепло и долгие прогулки под весенним солнцем'
+                },
+                {
+                    title: 'Майский расцвет',
+                    date: 'Май 2026',
+                    desc: 'Цветущая зелень и наслаждение каждым днём.'
+                },
+                {
+                    title: 'Тебе 23',
+                    date: 'Сегодня',
+                    desc: '23 - возраст расцвета'
+                }
+            ];
+
+            const icons = ['🎂', '🎓', '☀️', '🌊', '🍁', '💍', '❄️', '🎄', '🎲', '🌸', '🌿', '💖'];
+            // Фотографии для каждой из 12 секций
+            const bigPhotos = [
+                '/images/section1/photo_1_2026-06-23_12-37-25.jpg',
+                'images/2/photo_1_2026-06-23_12-38-02.jpg',
+                'images/3/photo_1_2026-06-23_13-24-41.jpg',
+                'images/4/photo_1_2026-06-23_13-33-11.jpg',
+                'images/5/photo_1_2026-06-23_13-33-33.jpg',
+                'images/6/photo_1_2026-06-23_13-46-52.jpg',
+                'images/7/photo_1_2026-06-23_13-47-10.jpg',
+                'images/8/photo_1_2026-06-23_13-47-24.jpg',
+                'images/9/photo_1_2026-06-23_13-48-53.jpg',
+                'images/10/photo_1_2026-06-23_14-00-36.jpg',
+                'images/12/nEm2REybPOLKtari4B0tsvjGdKEkoD_xWlMxK5iVGWzbPbpWpBOZ1TBY2l1-TqmA5W_aN8TCB845lahfjil0OCUY.jpg',
+                'images/12/XGCSBDAuTCkMfgwZbJaqm8y3HRhvOpycSgaUpY34Ak1iT5g84azCX18bM9Mc0XmGsXkVyTvgXQ2gvD5B30szJNqU.jpg'
+
+
+
+
+            ];
+
+            const small1Photos = [
+                'images/section1/photo_2_2026-06-23_12-37-25.jpg',
+                'images/2/photo_3_2026-06-23_12-38-02.jpg',
+                'images/3/photo_2_2026-06-23_13-24-41.jpg',
+                'images/4/photo_2_2026-06-23_13-33-11.jpg',
+                'images/5/photo_2_2026-06-23_13-33-33.jpg',
+                'images/6/photo_2_2026-06-23_13-46-52.jpg',
+                'images/7/photo_2_2026-06-23_13-47-10.jpg',
+                'images/8/photo_2_2026-06-23_13-47-24.jpg',
+                'images/9/photo_2_2026-06-23_13-48-53.jpg',
+                'images/10/photo_2_2026-06-23_14-00-36.jpg',
+                'images/11/photo_3_2026-06-23_14-03-23.jpg',
+                'images/11/photo_1_2026-06-23_14-03-23.jpg'
+                
+
+
+
+
+            ];
+
+            const small2Photos = [
+                'images/section1/photo_3_2026-06-23_12-37-25.jpg',
+                'images/2/photo_2_2026-06-23_12-38-02.jpg',
+                'images/3/photo_3_2026-06-23_13-24-41.jpg',
+                'images/4/photo_3_2026-06-23_13-33-11.jpg',
+                'images/5/photo_3_2026-06-23_13-33-33.jpg',
+                'images/6/photo_3_2026-06-23_13-46-52.jpg',
+                'images/7/photo_3_2026-06-23_13-47-10.jpg',
+                'images/8/photo_3_2026-06-23_13-47-24.jpg',
+                'images/9/photo_3_2026-06-23_13-48-53.jpg',
+                'images/10/photo_3_2026-06-23_14-00-36.jpg',
+                'images/12/b2jdlr9jNmZ5uMe3Mai3rCcUP8dvQjdMYeC3MWzh7cOSUiTgxqTgVZo3Px3guapnW95o1OWOVH02LkdX6lNDAUw1.jpg',
+                'images/11/pyJryrYn1m_qQmsNPQcFFhsU6Q9nZvV4GZOeHBf0sgUYFpgFbBJF7AN7vVodfES9Sh7qKufuHpv0tUAehq2yU9nF.jpg'
+                
+
+            ];
+
+            const scrollContainer = document.getElementById('scrollContainer');
+            const sideNav = document.getElementById('sideNav');
+            let navDots = [];
+
+            function createSection(index) {
+                const section = document.createElement('section');
+                section.className = 'section';
+                section.id = `section${index+1}`;
+                section.setAttribute('data-index', index);
+                section.style.background = sectionGradients[index];
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'section-content-wrapper';
+                // чередование расположения текста и фото
+                if (index % 2 === 0) {
+                    wrapper.classList.add('text-left');
+                } else {
+                    wrapper.classList.add('text-right');
+                }
+
+                const textBlock = document.createElement('div');
+                textBlock.className = 'text-block';
+                textBlock.innerHTML = `
+                    <span class="event-icon">${icons[index]}</span>
+                    <h2>${sectionsData[index].title}</h2>
+                    <div class="event-date">${sectionsData[index].date}</div>
+                    <p>${sectionsData[index].desc}</p>
+                `;
+
+                const photoGrid = document.createElement('div');
+                photoGrid.className = 'photo-grid';
+                photoGrid.innerHTML = `
+                    <div class="photo-big" style="background-image: url('${bigPhotos[index]}')"></div>
+                    <div class="photo-small" style="background-image: url('${small1Photos[index]}')"></div>
+                    <div class="photo-small" style="background-image: url('${small2Photos[index]}')"></div>
+                `;
+
+                wrapper.appendChild(textBlock);
+                wrapper.appendChild(photoGrid);
+                section.appendChild(wrapper);
+                return section;
+            }
+
+            function createFinalSection() {
+                const section = document.createElement('section');
+                section.className = 'section';
+                section.id = 'section13';
+                section.setAttribute('data-index', 12);
+                const wrapper = document.createElement('div');
+                wrapper.className = 'section-content-wrapper';
+                wrapper.innerHTML = `
+                    <span class="big-heart">💖</span>
+                    <h2>С Днём Рождения!</h2>
+                    <p style="font-size:1.2rem;color:#6b5a68;margin:1rem 0;">Пусть новый год жизни будет полон чудес, любви и счастья.</p>
+                    <p style="color:#5c4a55;">Ты — самое тёплое, светлое и прекрасное, что есть в нашей жизни. Мы тебя очень любим!</p>
+                    <button class="share-btn" id="shareBtn">✨ Поделиться радостью</button>
+                    <div class="confetti-container" id="confettiContainer"></div>
+                `;
+                section.appendChild(wrapper);
+                return section;
+            }
+
+            // строим 12 событий и финал
+            for (let i = 0; i < 12; i++) {
+                scrollContainer.appendChild(createSection(i));
+            }
+            scrollContainer.appendChild(createFinalSection());
+
+            // навигация
+            function buildNavigation() {
+                sideNav.innerHTML = '';
+                for (let i = 0; i < 13; i++) {
+                    const dot = document.createElement('a');
+                    dot.className = 'dot' + (i === 0 ? ' active' : '');
+                    dot.href = `#section${i+1}`;
+                    dot.setAttribute('data-section', i);
+                    dot.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        document.getElementById(`section${i+1}`).scrollIntoView({ behavior: 'smooth' });
+                    });
+                    sideNav.appendChild(dot);
+                }
+                navDots = document.querySelectorAll('.side-nav .dot');
+            }
+            buildNavigation();
+
+            // observer для активации секций
+            const sections = document.querySelectorAll('.section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const section = entry.target;
+                    const index = parseInt(section.getAttribute('data-index'));
+                    if (entry.intersectionRatio >= 0.4) {
+                        section.classList.add('visible');
+                        navDots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+                        if (index === 12 && !window.confettiTriggered) {
+                            if (index === 12 && !window.confettiTriggered) {
+                                window.confettiTriggered = true;
+                                // Автоматический запуск из центра экрана (как раньше)
+                                triggerConfetti('50%', '50%', 150);
+                            }
+                        }
+                    }
+                });
+            }, { threshold: 0.4 });
+            sections.forEach(s => observer.observe(s));
+
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    resizeCanvas();
+                    initPetals(window.innerWidth < 480 ? 25 : 45);
+                }, 100);
+            });
+
+            // конфетти
+            // Запуск конфетти от заданной точки (или из центра экрана)
+            function triggerConfetti(startX = '50%', startY = '50%', count = 120) {
+            const container = document.getElementById('confettiContainer');
+            if (!container) return;
+
+            const colors = [
+                '#f8d6e0','#e8b4c4','#e4d8f0','#c9b8e0',
+                '#fce4d6','#f5c9a8','#d8f0e4','#b4d8c4',
+                '#ffd1dc','#f0c5d6','#d5c5e8','#ffe0ec'
+            ];
+
+            for (let i = 0; i < count; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+
+                // Более широкий горизонтальный разброс (±300px вместо ±200px)
+                const driftX = (Math.random() - 0.5) * 600;
+                const driftMid = (Math.random() - 0.5) * 400;
+                const driftEnd = (Math.random() - 0.5) * 300;
+                const spinStart = Math.random() * 360;
+                const spinMid = Math.random() * 800;
+                const spinEnd = Math.random() * 1100;
+                const duration = 1.6 + Math.random() * 2.2;
+                const delay = Math.random() * 0.7;
+
+                piece.style.cssText = `
+                    left: ${startX};
+                    top: ${startY};
+                    width: ${7 + Math.random() * 10}px;
+                    height: ${7 + Math.random() * 10}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    --drift-x: ${driftX}px;
+                    --drift-mid: ${driftMid}px;
+                    --drift-end: ${driftEnd}px;
+                    --spin-start: ${spinStart}deg;
+                    --spin-mid: ${spinMid}deg;
+                    --spin-end: ${spinEnd}deg;
+                    --duration: ${duration}s;
+                    --delay: ${delay}s;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '3px'};
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                `;
+
+                container.appendChild(piece);
+                setTimeout(() => piece.remove(), (duration + delay) * 1000 + 200);
+            }
+        }
+
+            // splash screen
+            const splash = document.getElementById('splash');
+            const splashText = document.getElementById('splashText');
+            const fullText = 'Собираю самые тёплые моменты…';
+            let charIdx = 0;
+            function type() {
+                if (charIdx < fullText.length) {
+                    splashText.textContent += fullText[charIdx++];
+                    setTimeout(type, 70);
+                }
+            }
+            setTimeout(type, 400);
+            setTimeout(() => {
+                splash.classList.add('fade-out');
+                setTimeout(() => splash.classList.add('hidden'), 1000);
+            }, 4200);
+
+            // кнопка "поделиться"
+            // Запуск конфетти из кнопки при клике
+            document.addEventListener('click', function(e) {
+                if (e.target.id === 'shareBtn') {
+                    const btn = e.target;
+                    const rect = btn.getBoundingClientRect();
+                    // Координаты центра кнопки относительно контейнера конфетти
+                    const container = document.getElementById('confettiContainer');
+                    if (!container) return;
+
+                    const containerRect = container.getBoundingClientRect();
+                    const startX = (rect.left + rect.width / 2) - containerRect.left;
+                    const startY = (rect.top + rect.height / 2) - containerRect.top;
+
+                    // Запускаем много конфетти из точки кнопки
+                    triggerConfetti(startX + 'px', startY + 'px', 300);
+
+                    // Дополнительно: действие «Поделиться» (оставьте вашу предыдущую логику)
+                    const text = '💖 С Днём Рождения! Тёплая открытка-альбом.';
+                    if (navigator.share) {
+                        navigator.share({ title: 'Поздравление', text, url: window.location.href });
+                    } else {
+                        navigator.clipboard.writeText(text + ' ' + window.location.href);
+                        const originalText = btn.textContent;
+                        setTimeout(() => { btn.textContent = originalText; }, 2000);
+                    }
+                }
+            });
+
+            // лепестки (canvas)
+            const canvas = document.getElementById('petalsCanvas');
+            const ctx = canvas.getContext('2d');
+            let petals = [];
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            function createPetal() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: 5 + Math.random() * 10,
+                    speedY: 0.3 + Math.random() * 0.9,
+                    speedX: (Math.random() - 0.5) * 0.4,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotSpeed: (Math.random() - 0.5) * 0.02,
+                    opacity: 0.3 + Math.random() * 0.4,
+                    color: `rgba(248,214,224,`
+                };
+            }
+            function initPetals(count = 45) {
+                petals = Array.from({ length: count }, createPetal);
+            }
+            function drawPetal(p) {
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+                ctx.globalAlpha = p.opacity;
+                ctx.fillStyle = p.color + p.opacity + ')';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, p.size*0.6, p.size*0.3, 0, 0, Math.PI*2);
+                ctx.fill();
+                ctx.restore();
+            }
+            function updatePetal(p) {
+                p.y += p.speedY;
+                p.x += p.speedX + Math.sin(p.y * 0.015) * 0.2;
+                p.rotation += p.rotSpeed;
+                if (p.y > canvas.height + 20) { p.y = -20; p.x = Math.random() * canvas.width; }
+                if (p.x < -20) p.x = canvas.width + 20;
+                if (p.x > canvas.width + 20) p.x = -20;
+            }
+            function animatePetals() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                petals.forEach(p => { updatePetal(p); drawPetal(p); });
+                requestAnimationFrame(animatePetals);
+            }
+            resizeCanvas();
+            initPetals();
+            animatePetals();
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                initPetals(window.innerWidth < 480 ? 25 : 45);
+            });
+
+            console.log('🎀 Открытка готова! 12 событий + финал. Все фото загружены из папки images.');
+        })();
+    </script>
+</body>
+</html>
